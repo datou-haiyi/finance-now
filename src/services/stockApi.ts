@@ -1,7 +1,8 @@
 import { HotStock, HotSector } from '@/types';
+import { fetchRealHotStocks as fetchFromEastmoney, fetchRealHotSectors as fetchSectorsFromEastmoney } from './realStockApi';
 
 const AKSHARE_API_URL = import.meta.env.VITE_AKSHARE_API_URL || 'http://localhost:8000';
-const USE_REAL_API = import.meta.env.VITE_USE_REAL_API === 'true';
+const USE_REAL_API = import.meta.env.VITE_USE_REAL_API !== 'false'; // 默认使用真实 API
 
 // Mock 数据 - 热门股票
 const generateMockHotStocks = (): HotStock[] => {
@@ -128,7 +129,20 @@ const fetchRealHotSectors = async (): Promise<HotSector[]> => {
 // 导出统一接口
 export const fetchHotStocks = async (): Promise<HotStock[]> => {
   if (USE_REAL_API) {
-    return fetchRealHotStocks();
+    try {
+      // 优先使用东方财富公开 API（无需后端）
+      return await fetchFromEastmoney();
+    } catch (error) {
+      console.error('Failed to fetch from Eastmoney, trying AkShare:', error);
+      try {
+        // 回退到 AkShare API
+        return await fetchRealHotStocks();
+      } catch (err) {
+        console.error('Failed to fetch from AkShare, using mock data:', err);
+        // 最终回退到 Mock 数据
+        return generateMockHotStocks();
+      }
+    }
   }
 
   // 模拟 API 延迟
@@ -138,7 +152,20 @@ export const fetchHotStocks = async (): Promise<HotStock[]> => {
 
 export const fetchHotSectors = async (): Promise<HotSector[]> => {
   if (USE_REAL_API) {
-    return fetchRealHotSectors();
+    try {
+      // 优先使用东方财富公开 API（无需后端）
+      return await fetchSectorsFromEastmoney();
+    } catch (error) {
+      console.error('Failed to fetch from Eastmoney, trying AkShare:', error);
+      try {
+        // 回退到 AkShare API
+        return await fetchRealHotSectors();
+      } catch (err) {
+        console.error('Failed to fetch from AkShare, using mock data:', err);
+        // 最终回退到 Mock 数据
+        return generateMockHotSectors();
+      }
+    }
   }
 
   // 模拟 API 延迟
