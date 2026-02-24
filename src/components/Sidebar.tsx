@@ -1,11 +1,15 @@
 import { motion } from 'framer-motion';
-import { NewsItem } from '@/types';
+import { NewsItem, Category } from '@/types';
+import { HotStocks } from './HotStocks';
+import { HotSectors } from './HotSectors';
 
 interface SidebarProps {
   news: NewsItem[];
+  category: Category;
 }
 
-export const Sidebar = ({ news }: SidebarProps) => {
+export const Sidebar = ({ news, category }: SidebarProps) => {
+  const showCNStockData = category === 'cn-stocks' || category === 'all';
   // 统计数据
   const stats = {
     total: news.length,
@@ -34,10 +38,33 @@ export const Sidebar = ({ news }: SidebarProps) => {
 
   return (
     <aside className="space-y-4">
+      {/* A股热门股票 - 仅在 A股 或 全部 分类时显示 */}
+      {showCNStockData && (
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <HotStocks />
+        </motion.div>
+      )}
+
+      {/* A股热门板块 - 仅在 A股 或 全部 分类时显示 */}
+      {showCNStockData && (
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <HotSectors />
+        </motion.div>
+      )}
+
       {/* 数据源统计 */}
       <motion.div
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: showCNStockData ? 0.3 : 0.1 }}
         className="bg-white dark:bg-finance-dark-bg border border-finance-border dark:border-finance-dark-border p-4"
       >
         <h2 className="font-display text-sm font-semibold mb-3 text-finance-text dark:text-finance-dark-text">
@@ -73,7 +100,7 @@ export const Sidebar = ({ news }: SidebarProps) => {
       <motion.div
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.1 }}
+        transition={{ delay: showCNStockData ? 0.4 : 0.2 }}
         className="bg-white dark:bg-finance-dark-bg border border-finance-border dark:border-finance-dark-border p-4"
       >
         <h2 className="font-display text-sm font-semibold mb-3 text-finance-text dark:text-finance-dark-text">
@@ -103,7 +130,7 @@ export const Sidebar = ({ news }: SidebarProps) => {
       <motion.div
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.2 }}
+        transition={{ delay: showCNStockData ? 0.5 : 0.3 }}
         className="bg-white dark:bg-finance-dark-bg border border-finance-border dark:border-finance-dark-border p-4"
       >
         <h2 className="font-display text-sm font-semibold mb-3 text-finance-text dark:text-finance-dark-text">
@@ -125,7 +152,7 @@ export const Sidebar = ({ news }: SidebarProps) => {
       <motion.div
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.3 }}
+        transition={{ delay: showCNStockData ? 0.6 : 0.4 }}
         className="bg-white dark:bg-finance-dark-bg border border-finance-border dark:border-finance-dark-border p-4"
       >
         <h2 className="font-display text-sm font-semibold mb-2 text-finance-text dark:text-finance-dark-text">

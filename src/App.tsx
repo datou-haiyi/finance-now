@@ -62,7 +62,7 @@ function App() {
           {/* Sidebar */}
           <div className="hidden lg:block">
             <div className="sticky top-20">
-              <Sidebar news={news} />
+              <Sidebar news={news} category={category} />
             </div>
           </div>
         </div>
