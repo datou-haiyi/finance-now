@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # AkShare API 服务
+  akshare:
+    build:
+      context: ../dexter-finance/python-service
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: always
+    networks:
+      - finance-network
+
+  # OpenBB API 服务
+  openbb:
+    build:
+      context: ../dexter-finance/openbb-service
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: always
+    networks:
+      - finance-network
+
+  # Finance Now 前端
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - VITE_TAVILY_API_KEY=${VITE_TAVILY_API_KEY}
+        - VITE_AKSHARE_API_URL=http://akshare:8000
+        - VITE_OPENBB_API_URL=http://openbb:8001
+    ports:
+      - "80:80"
+    depends_on:
+      - akshare
+      - openbb
+    restart: always
+    networks:
+      - finance-network
+
+networks:
+  finance-network:
+    driver: bridge

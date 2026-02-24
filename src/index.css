@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-finance-bg dark:bg-finance-dark-bg text-finance-text dark:text-finance-dark-text;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-finance-bg dark:bg-finance-dark-bg;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-finance-border dark:bg-finance-dark-border rounded;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-finance-muted dark:bg-finance-dark-muted;
+  }
+
+  /* Hide scrollbar for mobile horizontal scrolling */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
