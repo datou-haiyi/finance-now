@@ -79,12 +79,47 @@ const generateMockNews = (category: Category, count: number = 20): NewsItem[] =>
     const publisher = categoryPublishers[Math.floor(Math.random() * categoryPublishers.length)];
     const minutesAgo = Math.floor(Math.random() * 180);
 
+    // 根据分类生成真实的新闻网站 URL
+    const urlMap = {
+      'us-stocks': [
+        'https://www.bloomberg.com/markets',
+        'https://www.cnbc.com/markets',
+        'https://www.marketwatch.com',
+        'https://seekingalpha.com',
+        'https://www.fool.com'
+      ],
+      'cn-stocks': [
+        'https://www.cls.cn',
+        'https://finance.eastmoney.com',
+        'https://finance.sina.com.cn',
+        'https://www.stcn.com',
+        'https://www.yicai.com'
+      ],
+      'crypto': [
+        'https://www.coindesk.com',
+        'https://decrypt.co',
+        'https://www.theblock.co',
+        'https://cointelegraph.com',
+        'https://cryptobriefing.com'
+      ],
+      'macro': [
+        'https://www.reuters.com/markets',
+        'https://www.ft.com',
+        'https://www.wsj.com/markets',
+        'https://www.economist.com',
+        'https://www.federalreserve.gov'
+      ]
+    };
+
+    const categoryUrls = urlMap[actualCategory as keyof typeof urlMap] || urlMap['us-stocks'];
+    const url = categoryUrls[Math.floor(Math.random() * categoryUrls.length)];
+
     return {
       id: `${actualCategory}-${i}-${Date.now()}`,
       title,
       source,
       category: actualCategory,
-      url: `https://example.com/news/${i}`,
+      url,
       publisher,
       timestamp: new Date(Date.now() - minutesAgo * 60 * 1000),
       summary: Math.random() > 0.7 ? `Full article available at ${publisher}. Click to read more details about this developing story.` : undefined,
